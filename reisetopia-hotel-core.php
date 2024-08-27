@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Reisetopia Hotel Core
  *
  * @package       REISETOPIA
- * @author        Nouman shahid 
+ * @author        Nouman shahid
  * @license       gplv2
  * @version       1.0.0
  *
@@ -24,30 +25,31 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if (! defined('ABSPATH')) exit;
 // Plugin name
-define( 'REISETOPIA_NAME',			'Reisetopia Hotel Core' );
+define('REISETOPIA_NAME',			'Reisetopia Hotel Core');
 
 // Plugin version
-define( 'REISETOPIA_VERSION',		'1.0.0' );
+define('REISETOPIA_VERSION',		'1.0.0');
 
 // Plugin Root File
-define( 'REISETOPIA_PLUGIN_FILE',	__FILE__ );
+define('REISETOPIA_PLUGIN_FILE',	__FILE__);
 
 // Plugin base
-define( 'REISETOPIA_PLUGIN_BASE',	plugin_basename( REISETOPIA_PLUGIN_FILE ) );
+define('REISETOPIA_PLUGIN_BASE',	plugin_basename(REISETOPIA_PLUGIN_FILE));
 
 // Plugin Folder Path
-define( 'REISETOPIA_PLUGIN_DIR',	plugin_dir_path( REISETOPIA_PLUGIN_FILE ) );
+define('REISETOPIA_PLUGIN_DIR',	plugin_dir_path(REISETOPIA_PLUGIN_FILE));
 
 // Plugin Folder URL
-define( 'REISETOPIA_PLUGIN_URL',	plugin_dir_url( REISETOPIA_PLUGIN_FILE ) );
+define('REISETOPIA_PLUGIN_URL',	plugin_dir_url(REISETOPIA_PLUGIN_FILE));
 
 /**
  * Load the main class for the core functionality
  */
 require_once REISETOPIA_PLUGIN_DIR . 'core/class-reisetopia-hotel-core.php';
-
+//acf integration
+require_once REISETOPIA_PLUGIN_DIR . 'acf/acf.php';
 /**
  * The main function to load the only instance
  * of our master class.
@@ -56,7 +58,8 @@ require_once REISETOPIA_PLUGIN_DIR . 'core/class-reisetopia-hotel-core.php';
  * @since   1.0.0
  * @return  object|Reisetopia_Hotel_Core
  */
-function REISETOPIA() {
+function REISETOPIA()
+{
 	return Reisetopia_Hotel_Core::instance();
 }
 
