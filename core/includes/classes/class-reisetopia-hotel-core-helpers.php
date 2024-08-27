@@ -18,14 +18,11 @@ class Reisetopia_Hotel_Core_Helpers{
 
 	function __construct(){
 
-    add_action( 'init', 'reisetopia_hotel_post_type' );
+    add_action( 'init', array($this, 'reisetopia_hotel_post_type'));
 }
-
-}
-if ( ! function_exists('reisetopia_hotel_post_type') ) {
-
 // Register Custom Post Type
-function reisetopia_hotel_post_type() {
+
+public function reisetopia_hotel_post_type() {
 
 	$labels = array(
 		'name'                  => _x( 'Reisetopia Hotels', 'Post Type General Name', 'reisetopia' ),
@@ -78,8 +75,5 @@ function reisetopia_hotel_post_type() {
 		'show_in_rest'          => true,
 	);
 	register_post_type( 'reisetopia_hotel', $args );
-
 }
-add_action( 'init', 'reisetopia_hotel_post_type', 0 );
-
 }
