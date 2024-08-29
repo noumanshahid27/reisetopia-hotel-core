@@ -10,8 +10,6 @@ jQuery(document).ready(function ($) {
         var hotel_name = jQuery("#hotel_name").val();
         var hotel_location = jQuery("#hotel_location").val();
         var source = jQuery("#source").val();
-        console.log("check value in keyup", hotel_location);
-        console.log("check length", jQuery(this).length);
             if (source == "ajax") {
                 reisetopia_ajax_callback(hotel_name, hotel_location);
             } else {
@@ -61,8 +59,6 @@ function reisetopia_restapi_callback(allhotel_apiurl, hotel_name = null, hotel_l
             return response.json();
         })
         .then((hotellists) => {
-            console.log(hotellists);
-            console.log('hotel list length', Object.keys(hotellists).length);
             hotel_output_format(hotellists);
            
         })
@@ -71,7 +67,6 @@ function reisetopia_restapi_callback(allhotel_apiurl, hotel_name = null, hotel_l
         });
 }
 function hotel_output_format(hotellists){
-    console.log(hotellists);
      var output = '';
     jQuery('#result-output .hotels-list').html();
             if(hotellists.code == 'no_hotel_found'){
