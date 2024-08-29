@@ -26,6 +26,13 @@ class Reisetopia_Hotel_Core_Helpers{
         add_filter( 'acf/settings/show_updates', '__return_false', 100 ); // hide updates
         add_action( 'acf/init', array($this, 'reisetopia_acf_fields')); // create acf fields
         add_action( 'rest_api_init', array($this, 'reisetopia_hotel_api_enpoints' )); // add rest api endpoints
+        // ajax function
+        add_action( 'wp_ajax_reisetopia_hotels_get_all',         array($this, 'reisetopia_hotels_get_all') );
+        add_action( 'wp_ajax_nopriv_reisetopia_hotels_get_all',  array($this, 'reisetopia_hotels_get_all') );
+        // get single hotel by id with ajax
+        add_action( 'wp_ajax_reisetopia_hotels_get_by_id',         array($this, 'reisetopia_hotels_get_by_id') );
+        add_action( 'wp_ajax_nopriv_reisetopia_hotels_get_by_id',  array($this, 'reisetopia_hotels_get_by_id') );
+        
   
     
     
@@ -260,15 +267,12 @@ public function reisetopia_hotel_api_enpoints(){
 public function get_reisetopia_hotels_posts_callback($request){
    // Initialize the array that will receive the posts' data. 
     $reisetopia_hotels_data = array();
-    // get and set the parameter
-    $paged = $request->get_param( 'page' );
-    $paged = ( isset( $paged ) || ! ( empty( $paged ) ) ) ? $paged : 1; 
+
     // Get the hotels
     $hotel_name = $request['name'];
     $hotel_location = $request['location'];
     $hotel_max_price = $request['max_price'];
     $args = array(
-            'paged' => $paged,
             'posts_per_page' => -1,            
             'post_type' => array( $this->post_type_name) // This is the line that allows to fetch multiple post types. 
         );
@@ -320,13 +324,13 @@ public function get_reisetopia_hotels_posts_callback($request){
             'name' => $hotel->post_title, 
             'city' => $hotel_city,
             'country' => $hotel_country,
-            'prieRange'=> (object) array(
+            'priceRange'=> (object) array(
                 'min'=> $hotel_min_price,
                 'max'=> $hotel_max_price,
             ),
         );
         if($hotel_rating){
-          $reisetopia_hotels_data['rating'] = $hotel_rating;
+         // $reisetopia_hotels_data['rating'] = $hotel_rating;
         }
         
     }    
@@ -336,11 +340,11 @@ public function get_reisetopia_hotels_posts_callback($request){
 public function get_reisetopia_hotels_by_id_callback($request){
     if ( false === $request['id'] ) {
                 return new WP_Error(
-                  'rest_comment_karma_failed',
-                  __( 'Failed to update comment karma.' ),
+                  'invalid_hotel_id',
+                  __( 'Please used the correct ID' ),
                   array( 'status' => 500 )
                 );
-            }
+    }
    // Initialize the array that will receive the posts' data. 
     $reisetopia_hotels_data = array();
     //get post id
@@ -370,7 +374,7 @@ public function get_reisetopia_hotels_by_id_callback($request){
             'name' => $hotel->post_title, 
             'city' => $hotel_city,
             'country' => $hotel_country,
-            'prieRange'=> (object) array(
+            'priceRange'=> (object) array(
                 'min'=> $hotel_min_price,
                 'max'=> $hotel_max_price,
             ),
@@ -378,4 +382,68 @@ public function get_reisetopia_hotels_by_id_callback($request){
     }                  
     return $reisetopia_hotels_data;        
 }
+// ajax function
+public function reisetopia_hotels_get_all() {
+    if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-nonce' ) ) {
+         die ( 'Not Valid Request!');
+     }
+    $success = null;
+    $reisetopia_hotels_data = array();
+    $hotel_name =sanitize_text_field($_POST['hotel_name']); 
+    $hotel_location = sanitize_text_field($_POST['hotel_location']);
+    $args = array(
+            'posts_per_page' => -1,            
+            'post_type' => array( $this->post_type_name) // This is the line that allows to fetch multiple post types. 
+        );
+    if($hotel_name){
+        $args['s'] = $hotel_name;
+    }
+    if($hotel_location){
+        $args['meta_query'] = array(
+            'relation' => 'OR',
+            array(
+                'key' => 'city',
+                'value' => $hotel_location,
+                'compare' => 'LIKE'
+            ),
+            array(
+                'key' => 'country',
+                'value' => $hotel_location,
+                'compare' => 'LIKE'
+            ),
+        );
+    }
+
+    $reisetopia_hotels_list = get_posts($args); 
+    if ( empty( $reisetopia_hotels_list ) ) {
+         $result['code'] = 'no_hotel_found';
+         $result['message'] = 'No Hotel Found';
+         wp_send_json( $result );
+    }
+    // Loop through the posts and push the desired data to the array we've initialized earlier in the form of an object
+    foreach( $reisetopia_hotels_list as $hotel ) {
+        $post_id = $hotel->ID; 
+        $hotel_city= get_field('city' ,$post_id);
+        $hotel_country= get_field('country' ,$post_id);
+        $hotel_min_price = get_field('price_range_min',$post_id);
+        $hotel_max_price = get_field('price_range_max' ,$post_id);
+        $hotel_rating = get_field('rating' ,$post_id);
+        $reisetopia_hotels_data[] = (object) array( 
+            'id' => $post_id, 
+            'name' => $hotel->post_title, 
+            'city' => $hotel_city,
+            'country' => $hotel_country,
+            'priceRange'=> (object) array(
+                'min'=> $hotel_min_price,
+                'max'=> $hotel_max_price,
+            ),
+        );
+        if($hotel_rating){
+         // $reisetopia_hotels_data['rating'] = $hotel_rating;
+        }
+        
+    }    
+    wp_send_json( $reisetopia_hotels_data );
+}
+
 }
