@@ -74,7 +74,6 @@ function hotel_output_format(hotellists){
             }
             if(Object.keys(hotellists).length >= 1 && hotellists.code == undefined){
                 for (var i = 0; i < Object.keys(hotellists).length; i++) {
-                    console.log('rating',hotellists[i].rating);
                     output += '<div class="hotel-item"><h4 class="hotel-name">' + hotellists[i].name + 
                     '</h4><div class="hotel-info"><p class="location"><span>location:</span><span>' + hotellists[i].city + ',' + hotellists[i].country + '</span></p>'+
                     '<p class="price-range"><span>Price range:</span><span>' + hotellists[i].priceRange.min + ' - ' + hotellists[i].priceRange.max + '€</span></p>';
