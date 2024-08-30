@@ -319,20 +319,20 @@ public function get_reisetopia_hotels_posts_callback($request){
         $hotel_min_price = get_field('price_range_min',$post_id);
         $hotel_max_price = get_field('price_range_max' ,$post_id);
         $hotel_rating = get_field('rating' ,$post_id);
-        $reisetopia_hotels_data[] = (object) array( 
+        $hotel_item_data =  array( 
             'id' => $post_id, 
             'name' => $hotel->post_title, 
             'city' => $hotel_city,
             'country' => $hotel_country,
-            'priceRange'=> (object) array(
+            'priceRange'=>  array(
                 'min'=> $hotel_min_price,
                 'max'=> $hotel_max_price,
             ),
         );
         if($hotel_rating){
-         // $reisetopia_hotels_data['rating'] = $hotel_rating;
+            $hotel_item_data['rating'] = $hotel_rating;
         }
-        
+        $reisetopia_hotels_data[] = $hotel_item_data;
     }    
     return $reisetopia_hotels_data;        
 }
@@ -365,20 +365,21 @@ public function get_reisetopia_hotels_by_id_callback($request){
         $hotel_country= get_field('country',$post_id);
         $hotel_min_price = get_field('price_range_min',$post_id);
         $hotel_max_price = get_field('price_range_max',$post_id);
-        $hotel_rating = get_field('rating',$post_id);
-        if($hotel_rating){
-            $reisetopia_hotels_data['rating'] = $hotel_rating;
-        }
-        $reisetopia_hotels_data[] = (object) array( 
+        $hotel_rating = get_field('rating' ,$post_id);
+        $hotel_item_data =  array( 
             'id' => $post_id, 
             'name' => $hotel->post_title, 
             'city' => $hotel_city,
             'country' => $hotel_country,
-            'priceRange'=> (object) array(
+            'priceRange'=>  array(
                 'min'=> $hotel_min_price,
                 'max'=> $hotel_max_price,
             ),
         );
+        if($hotel_rating){
+            $hotel_item_data['rating'] = $hotel_rating;
+        }
+        $reisetopia_hotels_data[] = $hotel_item_data;
     }                  
     return $reisetopia_hotels_data;        
 }
