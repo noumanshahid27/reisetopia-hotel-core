@@ -572,5 +572,5 @@ public function reisetopia_hotels_get_by_id(){
         
     }    
     wp_send_json( $reisetopia_hotels_data );
-} 
+}
 }
