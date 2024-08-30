@@ -13,15 +13,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  <div class="reisetopia-hotels-wrapper">
      <div class="inner-wrapper">
          <h3 class="filter-title">Filters</h3>
+         <div class="filters-section">
          <div class="filter-row">
              <form name="post" class="hotels-filters" method="POST">
+                 <div class="filter-row">
                  <div class="field-box">
                      <label for="hotel_name">Name</label>
-                     <input type="text" name="hotel_name" class="field name-field" id="hotel_name"/>
+                     <input type="text" name="name" class="field name-field" id="hotel_name"/>
                  </div>
                  <div class="field-box">
                       <label for="hotel_location">Location</label>
-                     <input type="text" name="hotel_location" class="field location-field" id="hotel_location"/>
+                     <input type="text" name="location" class="field location-field" id="hotel_location"/>
                  </div>
                  <div class="field-box">
                       <label for="max_price">Price</label>
@@ -35,11 +37,33 @@ if ( ! defined( 'ABSPATH' ) ) exit;
     	            	
                      </select>
                  </div>
+                </div>
+            <div class="sorting-row filter-row">
+              <div class="field-box sorting-row">
+                     <label for="sorting_type">Sorting Type</label>
+                     <select name="sorting_type" id="sorting_type" class="sorting-type field">
+                         <option value="title">Name</option>
+                         <option value="price_range_min">Minimum Price</option>
+                         <option value="price_range_max">Maximum Price</option>
+    	            	
+                     </select>
+                 </div>
+            <div class="field-box sorting-row">
+                     <label for="sorting_order">Sorting Order</label>
+                     <select name="sorting_order" id="sorting_order" class="sorting-order field">
+                         <option value="asc">Ascending</option>
+                         <option value="desc">Descending</option>
+    	            	
+                     </select>
+                 </div>
+         </div>
              </form>
+         </div>
+         </div>
          </div>
          <div id="result-output">
              <h3 class="result-title">Results</h3>
              <div class="hotels-list"></div>
          </div>
      </div>
-</div>
+ </div>

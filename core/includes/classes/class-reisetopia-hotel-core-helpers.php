@@ -249,9 +249,21 @@ public function reisetopia_hotel_api_enpoints(){
             			'required' => false,
             			'type' => 'string',
             		),
+            		'min_price' => array(
+                        'required' => false,
+                        'type' => 'numeric',
+                    ),
                     'max_price' => array(
                         'required' => false,
                         'type' => 'numeric',
+                    ),
+                    'orderby'=> array(
+                        'required' => false,
+                        'type' => 'string',
+                    ),
+                    'order'=> array(
+                        'required' => false,
+                        'type' => 'string',
                     ),
               ), 
             ),
@@ -286,7 +298,10 @@ public function get_reisetopia_hotels_posts_callback($request){
     $hotel_name = $request['name'];
     $hotel_location = $request['location'];
     $hotel_max_price = $request['max_price'];
+    $hotel_min_price = $request['min_price'];
     $paged = $request['page'] ? $request['page'] : 1;
+    $order_by = $request['orderby'] ? $request['orderby'] : 'title';
+    $order = $request['order'] ? $request['order'] : 'ASC';
     // conditon for location and max_price 
     if($hotel_location){
         $meta_query[] = array(
@@ -315,11 +330,30 @@ public function get_reisetopia_hotels_posts_callback($request){
             
         );
     }
+    if($hotel_min_price){
+         $meta_query[]= array(
+            'relation' => 'OR',
+             array(
+                'key' => 'price_range_min',
+                'compare' => '>=',
+                'value'     => intval($hotel_min_price),
+                'type'      => 'numeric'
+            ),
+            
+        );
+    }
+   
+    if($order_by == 'price_range_min' || $order_by == 'price_range_max'){
+        $args['meta_key']=$order_by;
+        $order_by = 'meta_value_num';
+    }
     $args = array(
             'paged'=>$paged,
             'posts_per_page' => 10,            
             'post_type' => array( $this->post_type_name), 
             'meta_query' => $meta_query,
+            'orderby'          => $order_by,
+		    'order'            => $order,
             's'=> $hotel_name ? $hotel_name : '',
         );
     $reisetopia_hotels_list = get_posts($args); 
@@ -400,20 +434,16 @@ public function reisetopia_hotels_get_all() {
      check_ajax_referer('reisetopia_ajax_nonce', 'security');
     $success = null;
     $reisetopia_hotels_data = array();
+    $meta_query = array();
     $paged = intval($_POST['page']) ? intval($_POST['page']) : 1;
     $hotel_name =sanitize_text_field($_POST['hotel_name']); 
     $hotel_location = sanitize_text_field($_POST['hotel_location']);
     $hotel_max_price = intval($_POST['max_price']);
-    $args = array(
-            'paged'=>$paged,
-            'posts_per_page' => 10,     
-            'post_type' => array( $this->post_type_name) // This is the line that allows to fetch multiple post types. 
-        );
-    if($hotel_name){
-        $args['s'] = $hotel_name;
-    }
+    $hotel_min_price = intval($_POST['min_price']); 
+    $order_by = $_POST['order_by'] ? $_POST['order_by'] : 'title';
+    $order = $_POST['order'] ? $_POST['order'] : 'ASC';
     if($hotel_location){
-        $args['meta_query'] = array(
+        $meta_query[]= array(
             'relation' => 'OR',
             array(
                 'key' => 'city',
@@ -433,13 +463,37 @@ public function reisetopia_hotels_get_all() {
             array(
                 'key' => 'price_range_max',
                 'compare' => '<=',
-                'value'     => intval($hotel_max_price),
+                'value'     => $hotel_max_price,
                 'type'      => 'numeric'
             ),
             
         );
     }
-
+        if($hotel_min_price){
+         $meta_query[]= array(
+            'relation' => 'OR',
+             array(
+                'key' => 'price_range_min',
+                'compare' => '>=',
+                'value'     => $hotel_min_price,
+                'type'      => 'numeric'
+            ),
+            
+        );
+    }
+    if($order_by == 'price_range_min' || $order_by == 'price_range_max'){
+        $args['meta_key']=$order_by;
+        $order_by = 'meta_value_num';
+    }
+    $args = array(
+            'paged'=>$paged,
+            'posts_per_page' => 10,            
+            'post_type' => array( $this->post_type_name), 
+            'meta_query' => $meta_query,
+            'orderby'          => $order_by,
+		    'order'            => $order,
+            's'=> $hotel_name ? $hotel_name : '',
+    );
     $reisetopia_hotels_list = get_posts($args); 
     if ( empty( $reisetopia_hotels_list ) ) {
          $result['code'] = 'no_hotel_found';
@@ -518,5 +572,5 @@ public function reisetopia_hotels_get_by_id(){
         
     }    
     wp_send_json( $reisetopia_hotels_data );
-}
+} 
 }
