@@ -2,35 +2,37 @@ jQuery(document).ready(function ($) {
     // api url
     const allhotel_apiurl = wpApiSettings.root + "reisetopia-hotels/v1/hotels";
     // default rest api callback
-    reisetopia_restapi_callback(allhotel_apiurl, '', '');
+    reisetopia_restapi_callback(allhotel_apiurl, '', '','');
     // ajax call method
     // on input change
     jQuery(".hotels-filters .field").keyup(function () {
-        var length_check = jQuery(this).val();
         var hotel_name = jQuery("#hotel_name").val();
         var hotel_location = jQuery("#hotel_location").val();
+        var max_price = jQuery("#max_price").val();
         var source = jQuery("#source").val();
             if (source == "ajax") {
-                reisetopia_ajax_callback(hotel_name, hotel_location);
+                reisetopia_ajax_callback(hotel_name, hotel_location,max_price);
             } else {
                 reisetopia_restapi_callback(
                     allhotel_apiurl,
                     hotel_name,
-                    hotel_location
+                    hotel_location,
+                    max_price
                 );
             }
     });
 });
-function reisetopia_ajax_callback(hotel_name, location) {
+function reisetopia_ajax_callback(hotel_name, location,max_price) {
     jQuery.ajax({
         url: reisetopia_ajax.ajaxurl,
         type: "post",
         dataType: "json",
         data: {
             action: "reisetopia_hotels_get_all",
-            nonce: reisetopia_ajax.nonce, // pass the nonce here
+            security: reisetopia_ajax.nonce, // pass the nonce here
             hotel_name: hotel_name,
             hotel_location: location,
+            max_price:max_price,
         },
         error: function (response, error) {
             console.log("wrong");
@@ -42,9 +44,9 @@ function reisetopia_ajax_callback(hotel_name, location) {
         },
     });
 }
-function reisetopia_restapi_callback(allhotel_apiurl, hotel_name = null, hotel_location = null) {
+function reisetopia_restapi_callback(allhotel_apiurl, hotel_name = null, hotel_location = null,max_price= null) {
 
-    finalapiurl = allhotel_apiurl + "/?name=" + hotel_name + "&location=" + hotel_location;
+    finalapiurl = allhotel_apiurl + "/?name=" + hotel_name + "&location=" + hotel_location + "&max_price="+max_price;
     // Make a GET request to retrieve posts
     fetch(finalapiurl, {
         method: "GET",

@@ -17,11 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
              <form name="post" class="hotels-filters" method="POST">
                  <div class="field-box">
                      <label for="hotel_name">Name</label>
-                     <input type="text" class="field name-field" id="hotel_name"/>
+                     <input type="text" name="hotel_name" class="field name-field" id="hotel_name"/>
                  </div>
                  <div class="field-box">
                       <label for="hotel_location">Location</label>
-                     <input type="text" class="field location-field" id="hotel_location"/>
+                     <input type="text" name="hotel_location" class="field location-field" id="hotel_location"/>
+                 </div>
+                 <div class="field-box">
+                      <label for="max_price">Price</label>
+                     <input type="number" name="max_price" class="field price-field" id="max_price"/>
                  </div>
                  <div class="field-box source-row">
                      <label for="source">Data Source</label>
@@ -38,4 +42,4 @@ if ( ! defined( 'ABSPATH' ) ) exit;
              <div class="hotels-list"></div>
          </div>
      </div>
- </div
+</div>

@@ -64,7 +64,7 @@ class Reisetopia_Hotel_Core_Run{
 	    wp_enqueue_script( 'reisetopia-frontend-scripts', REISETOPIA_PLUGIN_URL . 'core/includes/assets/js/frontend-scripts.js', array('jquery','wp-api-request'), REISETOPIA_VERSION, false );
 	    wp_localize_script( 'reisetopia-frontend-scripts', 'reisetopia_ajax', array(
 	        'ajaxurl' => admin_url( 'admin-ajax.php' ),
-	        'nonce' => wp_create_nonce('ajax-nonce')
+	        'nonce' => wp_create_nonce('reisetopia_ajax_nonce')
         ));
 	}
     public function display_reisetopia_hotels(){
