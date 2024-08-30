@@ -87,7 +87,7 @@ function hotel_output_format(hotellists){
                     '</h4><div class="hotel-info"><p class="location"><span>location:</span><span>' + hotellists[i].city + ',' + hotellists[i].country + '</span></p>'+
                     '<p class="price-range"><span>Price range:</span><span>' + hotellists[i].priceRange.min + ' - ' + hotellists[i].priceRange.max + '€</span></p>';
                     if (typeof hotellists[i].rating !== "undefined") {
-                         output +='<p class="rating"><span>Rating: <span>(' + hotellists[i].rating + ')</span></span></p>';
+                         output +='<p class="rating"><span>Rating: <span><img class="rating" src="'+reisetopia_ajax.plugin_dir+'core/includes/assets/img/star-ratings.png" alt="rating-icon"/>(' + hotellists[i].rating + ')</span></span></p>';
                     };
                      output += '</div></div>';
     

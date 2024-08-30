@@ -18,9 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 define( 'REISETOPIA_ACF_URL', plugin_dir_url( __FILE__ ) . 'acf/' );
 
 class Reisetopia_Hotel_Core_Helpers{
-    public $post_type_name ='reisetopia_hotel';
+    public $post_type_name;
+    public $default_posts_per_page;
 
 	function __construct(){
+	    $this->post_type_name = 'reisetopia_hotel';
+        $this->default_posts_per_page = get_option( 'posts_per_page' );
         add_action( 'init', array($this, 'reisetopia_hotel_post_type')); // create custom post type
         add_filter( 'acf/settings/show_admin', '__return_false' ); //hide admin menu page for acf
         add_filter( 'acf/settings/show_updates', '__return_false', 100 ); // hide updates
@@ -349,14 +352,15 @@ public function get_reisetopia_hotels_posts_callback($request){
     }
     $args = array(
             'paged'=>$paged,
-            'posts_per_page' => 10,            
+            'posts_per_page' => $this->default_posts_per_page,            
             'post_type' => array( $this->post_type_name), 
             'meta_query' => $meta_query,
             'orderby'          => $order_by,
 		    'order'            => $order,
             's'=> $hotel_name ? $hotel_name : '',
         );
-    $reisetopia_hotels_list = get_posts($args); 
+    $reisetopia_hotels_list = get_posts($args);
+    $total_hotels =  count($reisetopia_hotels_list);
     if ( empty( $reisetopia_hotels_list ) ) {
     return new WP_Error( 'no_hotel_found', 'No Hotel found', array( 'status' => 200 ) );
   }
@@ -487,7 +491,7 @@ public function reisetopia_hotels_get_all() {
     }
     $args = array(
             'paged'=>$paged,
-            'posts_per_page' => 10,            
+            'posts_per_page' => $this->default_posts_per_page,            
             'post_type' => array( $this->post_type_name), 
             'meta_query' => $meta_query,
             'orderby'          => $order_by,
@@ -528,9 +532,7 @@ public function reisetopia_hotels_get_all() {
 }
 // ajax function for single hotel by id
 public function reisetopia_hotels_get_by_id(){
-     if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-nonce' ) ) {
-         die ( 'Not Valid Request!');
-     }
+     check_ajax_referer('reisetopia_ajax_nonce', 'security');
      
     $success = null;
     $reisetopia_hotels_data = array();

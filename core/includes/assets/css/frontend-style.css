@@ -1,18 +1,9 @@
-.reisetopia-hotels-wrapper  .hotels-list .hotel-item {
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0px 0px 10px #efefef;
-    margin-bottom: 25px;
-}
-
 .reisetopia-hotels-wrapper {
     background-color: #efefef;
     padding: 20px;
     border-radius: 5px;
     max-width: 100% !important;
 }
-
 .reisetopia-hotels-wrapper  .filter-row form {
     display: flex;
     gap: 15px;
@@ -20,7 +11,6 @@
     justify-content: space-between;
     align-items: end;
 }
-
 .reisetopia-hotels-wrapper .filter-row form input {
     background-color: #fff;
     border: 1px solid #efefef;
@@ -44,6 +34,26 @@
     width: 100%;
     border: 1px solid #efefef;
 }
+.reisetopia-hotels-wrapper .filter-row form .filter-row {
+    display: flex;
+    flex: 0 0 100%;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.reisetopia-hotels-wrapper  .hotels-list .hotel-item {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px #efefef;
+    margin-bottom: 25px;
+}
+.reisetopia-hotels-wrapper  .hotels-list .hotel-item .rating {
+    height: 15px;
+    width: auto;
+    vertical-align: text-top;
+}
+
+
 .reisetopia-hotels-wrapper .hotels-list .hotel-item .hotel-name {
     font-size: 24px;
     margin: 0px 0px 10px 0px;
@@ -58,12 +68,7 @@
     font-size: 16px;
     font-weight: 700;
 }
-.reisetopia-hotels-wrapper .filter-row form .filter-row {
-    display: flex;
-    flex: 0 0 100%;
-    flex-wrap: wrap;
-    gap: 15px;
-}
+
 /*** price range slider ***/
 
 
