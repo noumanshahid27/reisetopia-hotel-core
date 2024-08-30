@@ -2,7 +2,7 @@ jQuery(document).ready(function ($) {
     // api url
     const allhotel_apiurl = wpApiSettings.root + "reisetopia-hotels/v1/hotels";
     // default rest api callback
-    reisetopia_restapi_callback(allhotel_apiurl, '', '','','','','');
+    reisetopia_restapi_callback(allhotel_apiurl, '', '','','','');
     // ajax call method
     // on input change
     jQuery(".hotels-filters .field").on("keyup change", function(e) {
@@ -13,21 +13,20 @@ jQuery(document).ready(function ($) {
         var order_by = jQuery("#sorting_type").val();
         var order = jQuery("#sorting_order").val();
             if (source == "ajax") {
-                reisetopia_ajax_callback(hotel_name, hotel_location,min_price,max_price,order_by,order);
+                reisetopia_ajax_callback(hotel_name, hotel_location,max_price,order_by,order);
             } else {
                 reisetopia_restapi_callback(
                     allhotel_apiurl,
                     hotel_name,
                     hotel_location,
                     max_price,
-                    min_price,
                     order_by,
                     order
                 );
             }
     });
 });
-function reisetopia_ajax_callback(hotel_name, location,max_price,min_price,order_by,order) {
+function reisetopia_ajax_callback(hotel_name, location,max_price,order_by,order) {
     jQuery.ajax({
         url: reisetopia_ajax.ajaxurl,
         type: "post",
@@ -38,7 +37,6 @@ function reisetopia_ajax_callback(hotel_name, location,max_price,min_price,order
             hotel_name: hotel_name,
             hotel_location: location,
             max_price:max_price,
-            min_price:min_price,
             order_by:order_by,
             order:order,
             
@@ -97,3 +95,4 @@ function hotel_output_format(hotellists){
                  jQuery('#result-output .hotels-list').html(output);
             }
 }
+/*** price rang slider***/
