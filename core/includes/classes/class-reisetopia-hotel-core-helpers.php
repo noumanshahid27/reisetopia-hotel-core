@@ -18,12 +18,28 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 define( 'REISETOPIA_ACF_URL', plugin_dir_url( __FILE__ ) . 'acf/' );
 
 class Reisetopia_Hotel_Core_Helpers{
+    /**post type**/
+    
     public $post_type_name;
-    public $default_posts_per_page;
+    
+    /**post_per_page***/
+    
+     public $default_posts_per_page;
+     
+    /*** namespace for rest-api**/
+    
+    public $namespace;
+    
+    /*** rest-base***/
+    
+    public $rest_base;
 
 	function __construct(){
+	    // default variable values
 	    $this->post_type_name = 'reisetopia_hotel';
         $this->default_posts_per_page = get_option( 'posts_per_page' );
+        $this->namespace = 'reisetopia-hotels/v1'; 
+        $this->rest_base = 'hotels';
         add_action( 'init', array($this, 'reisetopia_hotel_post_type')); // create custom post type
         add_filter( 'acf/settings/show_admin', '__return_false' ); //hide admin menu page for acf
         add_filter( 'acf/settings/show_updates', '__return_false', 100 ); // hide updates
@@ -237,8 +253,8 @@ public function reisetopia_hotel_api_enpoints(){
    
     // get all hotel list endpoint
     register_rest_route(
-        'reisetopia-hotels/v1',
-        '/hotels',
+        $this->namespace,
+        '/'.$this->rest_base,
         array(
             array(
                 'methods'  => 'GET',
@@ -274,8 +290,8 @@ public function reisetopia_hotel_api_enpoints(){
     );
     // get specific hotel endpoint
      register_rest_route(
-        'reisetopia-hotels/v1',
-        '/hotels/(?P<id>\d+)',
+        $this->namespace,
+        '/'.$this->rest_base.'/(?P<id>\d+)',
         array(
             array(
                 'methods'  => 'GET',
