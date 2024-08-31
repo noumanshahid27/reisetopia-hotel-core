@@ -41,7 +41,12 @@ const sliderRange = jQuery("#slider-range");
     slide: function(event, ui){
          jQuery("#min_price_input").val(ui.values[0]);
       jQuery("#max_price_input").val(ui.values[1]);
-    reisetopia_restapi_callback(allhotel_apiurl,'', '',ui.values[0],ui.values[1],'','');
+      var source = jQuery("#source").val();
+      if (source == "ajax") {
+           reisetopia_ajax_callback('', '',ui.values[0],ui.values[1],'','');
+      }else{
+        reisetopia_restapi_callback(allhotel_apiurl,'', '',ui.values[0],ui.values[1],'','');
+      }
     }
   });
  jQuery("#priceRange").val(jQuery("#price-range").slider("values", 0) + " - " + jQuery("#price-range").slider("values", 1));
@@ -64,7 +69,13 @@ const sliderRange = jQuery("#slider-range");
     if (min_price_input >= max_price_input) {
       min_price_input = max_price_input;
     }
-    reisetopia_restapi_callback(allhotel_apiurl,'', '',min_price_input,max_price_input,'','');
+    var source = jQuery("#source").val();
+     if (source == "ajax") {
+           reisetopia_ajax_callback('', '',min_price_input,max_price_input,'','');
+      }else{
+        reisetopia_restapi_callback(allhotel_apiurl,'', '',min_price_input,max_price_input,'','');
+      }
+    
     sliderRange.slider("values", 0, min_price_input);
   });
 
@@ -75,7 +86,12 @@ const sliderRange = jQuery("#slider-range");
     if (max_price_input <= min_price_input) {
       max_price_input = min_price_input;
     }
-reisetopia_restapi_callback(allhotel_apiurl,'', '',min_price_input,max_price_input,'','');
+    var source = jQuery("#source").val();
+    if (source == "ajax") {
+           reisetopia_ajax_callback('', '',min_price_input,max_price_input,'','');
+      }else{
+        reisetopia_restapi_callback(allhotel_apiurl,'', '',min_price_input,max_price_input,'','');
+      }
     sliderRange.slider("values", 1, max_price_input);
   });
 });

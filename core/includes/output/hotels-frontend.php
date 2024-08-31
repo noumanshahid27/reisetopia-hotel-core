@@ -58,6 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                  </div>
          </div>
          <div class="filter-row price-range-filter">
+             <label for="slider-range">Price Range</label>
             <input type="number" name="min_price" id="min_price_input" class="price-field">
             <input type="number" name="max_price" id="max_price_input" class="price-field">
             <div id="slider-range"></div>
