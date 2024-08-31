@@ -563,7 +563,7 @@ public function reisetopia_hotels_get_by_id(){
     $success = null;
     $reisetopia_hotels_data = array();
      //get post id
-     $post_id = $request['id'];
+     $post_id = $_POST['id'];
     // Get the posts using the 'post' and 'news' post types
     $reisetopia_hotels_list = get_posts( array(
             'post__in' => array($post_id),
