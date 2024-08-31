@@ -60,7 +60,9 @@ class Reisetopia_Hotel_Core_Run{
 		
 	}
 	public function enqueue_frontend_scripts_and_styles(){
+	    wp_enqueue_style( 'jquery-ui', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css', array(), REISETOPIA_VERSION, 'all' );
 	    wp_enqueue_style( 'reisetopia-backend-styles', REISETOPIA_PLUGIN_URL . 'core/includes/assets/css/frontend-style.css', array(), REISETOPIA_VERSION, 'all' );
+	    wp_enqueue_script( 'jquery-ui', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js', array('jquery'), REISETOPIA_VERSION, false );
 	    wp_enqueue_script( 'reisetopia-frontend-scripts', REISETOPIA_PLUGIN_URL . 'core/includes/assets/js/frontend-scripts.js', array('jquery','wp-api-request'), REISETOPIA_VERSION, false );
 	    wp_localize_script( 'reisetopia-frontend-scripts', 'reisetopia_ajax', array(
 	        'ajaxurl' => admin_url( 'admin-ajax.php' ),

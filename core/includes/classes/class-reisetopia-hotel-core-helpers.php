@@ -38,7 +38,7 @@ class Reisetopia_Hotel_Core_Helpers{
 	    // default variable values
 	    $this->post_type_name = 'reisetopia_hotel';
         $this->default_posts_per_page = get_option( 'posts_per_page' );
-        $this->namespace = 'reisetopia-hotels/v1'; 
+        $this->namespace = 'reisetopia-hotels/v1';
         $this->rest_base = 'hotels';
         add_action( 'init', array($this, 'reisetopia_hotel_post_type')); // create custom post type
         add_filter( 'acf/settings/show_admin', '__return_false' ); //hide admin menu page for acf
@@ -284,6 +284,14 @@ public function reisetopia_hotel_api_enpoints(){
                         'required' => false,
                         'type' => 'string',
                     ),
+                    'page'=> array(
+                        'required' => false,
+                        'type' => 'numeric',
+                    ),
+                    'per_page'=> array(
+                        'required' => false,
+                        'type' => 'numeric',
+                    ),
               ), 
             ),
         )
@@ -319,6 +327,7 @@ public function get_reisetopia_hotels_posts_callback($request){
     $hotel_max_price = $request['max_price'];
     $hotel_min_price = $request['min_price'];
     $paged = $request['page'] ? $request['page'] : 1;
+    $post_per_page = $request['per_page'] ? $request['per_page'] : $this->default_posts_per_page ;
     $order_by = $request['orderby'] ? $request['orderby'] : 'title';
     $order = $request['order'] ? $request['order'] : 'ASC';
     // conditon for location and max_price 
@@ -368,7 +377,7 @@ public function get_reisetopia_hotels_posts_callback($request){
     }
     $args = array(
             'paged'=>$paged,
-            'posts_per_page' => $this->default_posts_per_page,            
+            'posts_per_page' => $post_per_page,            
             'post_type' => array( $this->post_type_name), 
             'meta_query' => $meta_query,
             'orderby'          => $order_by,
@@ -456,6 +465,7 @@ public function reisetopia_hotels_get_all() {
     $reisetopia_hotels_data = array();
     $meta_query = array();
     $paged = intval($_POST['page']) ? intval($_POST['page']) : 1;
+    $post_per_page = intval($_POST['per_page']) ? intval($_POST['per_page']) : $this->default_posts_per_page ;
     $hotel_name =sanitize_text_field($_POST['hotel_name']); 
     $hotel_location = sanitize_text_field($_POST['hotel_location']);
     $hotel_max_price = intval($_POST['max_price']);
@@ -507,7 +517,7 @@ public function reisetopia_hotels_get_all() {
     }
     $args = array(
             'paged'=>$paged,
-            'posts_per_page' => $this->default_posts_per_page,            
+            'posts_per_page' => $post_per_page,            
             'post_type' => array( $this->post_type_name), 
             'meta_query' => $meta_query,
             'orderby'          => $order_by,
